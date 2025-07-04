@@ -48,7 +48,11 @@ def load_app_context():
         app_path = Path(__file__).parent / 'app.py'
         
         if not app_path.exists():
-            print("Warning: app.py not found in repository root. Documentation will be generated without API context.")
+            msg = (
+                "Warning: app.py not found in repository root. Documentation "
+                "will be generated without API context."
+            )
+            print(msg)
             return None
             
         with open(app_path, 'r', encoding='utf-8') as f:
@@ -58,6 +62,7 @@ def load_app_context():
         return None
 
 # The prompt template to send to Claude
+# ruff: noqa: E501
 CLAUDE_PROMPT = '''
 
     I am providing you with a Python file containing API endpoint definitions.
@@ -118,7 +123,8 @@ def call_claude_api(message: str, api_key: str) -> str:
     response = requests.post(
         "https://api.anthropic.com/v1/messages",
         headers=headers,
-        json=data
+        json=data,
+        timeout=30,
     )
     
     if response.status_code != 200:
@@ -171,7 +177,11 @@ def process_single_file(source_file: Path, output_path: Path, api_key: str, forc
             
         # Check if docs were recently updated
         if should_skip_doc_generation(output_file, force):
-            print(f"Skipping {source_file} - documentation updated within the last 24 hours")
+            msg = (
+                f"Skipping {source_file} - documentation updated within the "
+                "last 24 hours"
+            )
+            print(msg)
             return
             
         # Read the source file
@@ -233,7 +243,11 @@ def process_directory(source_dir: Path, output_dir: Path, api_key: str, force: b
                     
                     # Check if we should skip this file
                     if should_skip_doc_generation(output_file, force):
-                        print(f"Skipping {source_file} - documentation updated within the last 24 hours")
+                        msg = (
+                            f"Skipping {source_file} - documentation updated within "
+                            "the last 24 hours"
+                        )
+                        print(msg)
                         skipped_files += 1
                         continue
 
@@ -269,8 +283,12 @@ def main():
         print("Usage: python script.py <source_path> [--force]")
         print("Note: source_path can be either a single .py file or a directory")
         print("Options:")
-        print("  --force: Generate documentation even if it was updated within 24 hours")
-        print("\nPlease ensure .env_shell.json exists in the same directory with:")
+        print(
+            "  --force: Generate documentation even if it was updated within 24 hours"
+        )
+        print(
+            "\nPlease ensure .env_shell.json exists in the same directory with:"
+        )
         print("  ANTHROPIC_API_KEY: Your Anthropic API key")
         print("  API_DOC_OUTPUT_DIR: Directory where documentation will be saved")
         sys.exit(1)
@@ -307,18 +325,32 @@ def main():
     print(f"Source: {source_path}")
     print(f"Output: {output_path}")
     if force_generation:
-        print("Force flag enabled: Will generate all documentation regardless of last update time.\n")
+        print(
+            "Force flag enabled: Will generate all documentation regardless of "
+            "last update time.\n"
+        )
     else:
-        print("Note: Files updated within the last 24 hours will be skipped (use --force to override).\n")
+        print(
+            "Note: Files updated within the last 24 hours will be skipped "
+            "(use --force to override).\n"
+        )
     
     # Process based on source type
     if source_path.is_file():
         # For a single file
-        output_file = output_path / source_path.with_suffix('.md').name if output_path.is_dir() else output_path
+        output_file = (
+            output_path / source_path.with_suffix('.md').name
+            if output_path.is_dir()
+            else output_path
+        )
         
         # Check if should skip
         if should_skip_doc_generation(output_file, force_generation):
-            print(f"Skipping {source_path} - documentation updated within the last 24 hours")
+            msg = (
+                f"Skipping {source_path} - documentation updated within the last "
+                "24 hours"
+            )
+            print(msg)
         else:
             process_single_file(source_path, output_path, api_key, force_generation)
     else:

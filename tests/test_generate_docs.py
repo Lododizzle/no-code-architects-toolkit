@@ -3,7 +3,6 @@ import importlib
 from pathlib import Path
 import time
 
-import pytest
 
 import generate_docs
 

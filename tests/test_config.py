@@ -1,5 +1,4 @@
 import importlib
-import os
 import sys
 import pytest
 
@@ -16,11 +15,21 @@ def reload_config(monkeypatch, **env):
 
 
 def test_validate_env_vars_success(monkeypatch, tmp_path):
-    cfg = reload_config(monkeypatch, API_KEY='x', GCP_BUCKET_NAME='b', GCP_SA_CREDENTIALS='c')
+    cfg = reload_config(
+        monkeypatch,
+        API_KEY='x',
+        GCP_BUCKET_NAME='b',
+        GCP_SA_CREDENTIALS='c',
+    )
     cfg.validate_env_vars('GCP')
 
 
 def test_validate_env_vars_missing(monkeypatch):
-    cfg = reload_config(monkeypatch, API_KEY='x', GCP_BUCKET_NAME=None, GCP_SA_CREDENTIALS=None)
+    cfg = reload_config(
+        monkeypatch,
+        API_KEY='x',
+        GCP_BUCKET_NAME=None,
+        GCP_SA_CREDENTIALS=None,
+    )
     with pytest.raises(ValueError):
         cfg.validate_env_vars('GCP')
