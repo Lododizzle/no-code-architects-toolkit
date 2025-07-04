@@ -24,7 +24,10 @@ import uuid
 import os
 import time
 from version import BUILD_NUMBER  # Import the BUILD_NUMBER
-from app_utils import log_job_status, discover_and_register_blueprints  # Import the discover_and_register_blueprints function
+from app_utils import (
+    log_job_status,
+    discover_and_register_blueprints,
+)
 
 MAX_QUEUE_LENGTH = int(os.environ.get('MAX_QUEUE_LENGTH', 0))
 
@@ -173,7 +176,13 @@ def create_app():
                         "response": None
                     })
                     
-                    task_queue.put((job_id, data, lambda: f(job_id=job_id, data=data, *args, **kwargs), start_time))
+                    task = (
+                        job_id,
+                        data,
+                        lambda: f(job_id=job_id, data=data, *args, **kwargs),
+                        start_time,
+                    )
+                    task_queue.put(task)
                     
                     return {
                         "code": 202,
@@ -182,7 +191,9 @@ def create_app():
                         "message": "processing",
                         "pid": pid,
                         "queue_id": queue_id,
-                        "max_queue_length": MAX_QUEUE_LENGTH if MAX_QUEUE_LENGTH > 0 else "unlimited",
+                        "max_queue_length": (
+                            MAX_QUEUE_LENGTH if MAX_QUEUE_LENGTH > 0 else "unlimited"
+                        ),
                         "queue_length": task_queue.qsize(),
                         "build_number": BUILD_NUMBER  # Add build number to response
                     }, 202
@@ -203,4 +214,5 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    host = os.environ.get("APP_HOST", "127.0.0.1")
+    app.run(host=host, port=8080)

@@ -33,7 +33,8 @@ def validate_payload(schema):
             try:
                 jsonschema.validate(instance=request.json, schema=schema)
             except jsonschema.exceptions.ValidationError as validation_error:
-                return jsonify({"message": f"Invalid payload: {validation_error.message}"}), 400
+                error_msg = f"Invalid payload: {validation_error.message}"
+                return jsonify({"message": error_msg}), 400
             
             return f(*args, **kwargs)
         return decorated_function
@@ -69,13 +70,15 @@ def queue_task_wrapper(bypass_queue=False):
     return decorator
 
 def discover_and_register_blueprints(app, base_dir='routes'):
-    """
-    Dynamically discovers and registers all Flask blueprints in the routes directory.
-    Recursively searches all subdirectories for Python modules containing Blueprint instances.
-    
+    """Discover and register all Flask blueprints under ``base_dir``.
+
+    Recursively searches subdirectories for Python modules that contain
+    ``Blueprint`` instances.
+
     Args:
-        app (Flask): The Flask application instance
-        base_dir (str): Base directory to start searching for blueprints (default: 'routes')
+        app (Flask): The Flask application instance.
+        base_dir (str): Directory to search for blueprints. Defaults to
+            ``'routes'``.
     """
     import importlib
     import inspect
@@ -98,6 +101,7 @@ def discover_and_register_blueprints(app, base_dir='routes'):
         base_dir = os.path.join(cwd, base_dir)
     
     registered_blueprints = set()
+    pid = os.getpid()
     
     # Find all Python files in the routes directory, including subdirectories
     python_files = glob.glob(os.path.join(base_dir, '**', '*.py'), recursive=True)

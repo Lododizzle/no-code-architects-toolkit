@@ -2,7 +2,6 @@ import json
 import importlib
 from pathlib import Path
 import time
-
 import pytest
 
 import generate_docs
@@ -30,3 +29,26 @@ def test_should_skip_doc_generation(tmp_path):
     os.utime(test_file, (old, old))
     assert generate_docs.should_skip_doc_generation(test_file) is False
     assert generate_docs.should_skip_doc_generation(test_file, force=True) is False
+
+
+
+@pytest.mark.parametrize(
+    "contents, expect_error",
+    [
+        ("{", True),
+        ("{\"ANTHROPIC_API_KEY\": \"k\"}", False),
+    ],
+)
+def test_load_config_edge(tmp_path, contents, expect_error):
+    cfg_path = Path(generate_docs.__file__).parent / ".env_shell.json"
+    cfg_path.write_text(contents)
+
+    if expect_error:
+        with pytest.raises(SystemExit):
+            importlib.reload(generate_docs)
+            generate_docs.load_config()
+    else:
+        importlib.reload(generate_docs)
+        generate_docs.load_config()
+
+    cfg_path.unlink()

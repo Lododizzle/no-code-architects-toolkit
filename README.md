@@ -16,13 +16,10 @@ The 100% FREE No-Code Architects Toolkit API processes different types of media.
 git clone https://github.com/stephengpope/no-code-architects-toolkit.git
 cd no-code-architects-toolkit
 pip install -r requirements.txt
+pip install pytest-cov ruff
+ruff check . --select E,F
+pytest -q --cov=.
 python app.py
-```
-
-Run tests with coverage:
-
-```bash
-pytest --cov=./
 ```
 
 ## What Can It Do?
