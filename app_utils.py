@@ -101,6 +101,7 @@ def discover_and_register_blueprints(app, base_dir='routes'):
         base_dir = os.path.join(cwd, base_dir)
     
     registered_blueprints = set()
+    pid = os.getpid()
     
     # Find all Python files in the routes directory, including subdirectories
     python_files = glob.glob(os.path.join(base_dir, '**', '*.py'), recursive=True)
