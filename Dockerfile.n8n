@@ -1,0 +1,11 @@
+FROM docker.n8n.io/n8nio/n8n:1.100.1
+USER root
+RUN apt-get update && apt-get install -y wget ca-certificates && \
+    wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/local/bin/mc && \
+    chmod +x /usr/local/bin/mc && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set up mc alias for MinIO on container start
+COPY docker-entrypoint-n8n.sh /docker-entrypoint-n8n.sh
+RUN chmod +x /docker-entrypoint-n8n.sh
+ENTRYPOINT ["/docker-entrypoint-n8n.sh"] 
