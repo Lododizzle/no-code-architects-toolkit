@@ -44,8 +44,7 @@ def load_config():
 def load_app_context():
     """Load the app.py file from the root of the repository."""
     try:
-        # Get the root directory by going up from the current file's location
-        root_dir = Path(__file__).parent.parent
+        # Path to the app.py file located at the repository root
         app_path = Path(__file__).parent / 'app.py'
         
         if not app_path.exists():
@@ -304,13 +303,13 @@ def main():
     # Create output directory if it doesn't exist
     output_path.mkdir(parents=True, exist_ok=True)
 
-    print(f"Starting documentation generation...")
+    print("Starting documentation generation...")
     print(f"Source: {source_path}")
     print(f"Output: {output_path}")
     if force_generation:
-        print(f"Force flag enabled: Will generate all documentation regardless of last update time.\n")
+        print("Force flag enabled: Will generate all documentation regardless of last update time.\n")
     else:
-        print(f"Note: Files updated within the last 24 hours will be skipped (use --force to override).\n")
+        print("Note: Files updated within the last 24 hours will be skipped (use --force to override).\n")
     
     # Process based on source type
     if source_path.is_file():

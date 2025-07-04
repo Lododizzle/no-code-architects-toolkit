@@ -17,7 +17,6 @@
 
 
 import os
-import logging
 
 # Retrieve the API key from environment variables
 API_KEY = os.environ.get('API_KEY')
