@@ -34,6 +34,12 @@ def test_validate_env_vars_missing(monkeypatch):
     with pytest.raises(ValueError):
         cfg.validate_env_vars('GCP')
 
+
+def test_validate_env_vars_unknown_provider(monkeypatch):
+    cfg = reload_config(monkeypatch, API_KEY='x')
+    with pytest.raises(ValueError, match="Unsupported provider: UNKNOWN"):
+        cfg.validate_env_vars('UNKNOWN')
+
 @pytest.mark.parametrize(
     "provider, env_vars, should_raise",
     [
