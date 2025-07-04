@@ -29,6 +29,7 @@ from app_utils import log_job_status, discover_and_register_blueprints  # Import
 MAX_QUEUE_LENGTH = int(os.environ.get('MAX_QUEUE_LENGTH', 0))
 
 def create_app():
+    """Create and configure the Flask application with a task queue."""
     app = Flask(__name__)
 
     # Create a queue to hold tasks
@@ -92,6 +93,7 @@ def create_app():
 
     # Decorator to add tasks to the queue or bypass it
     def queue_task(bypass_queue=False):
+        """Return a decorator that queues tasks unless bypassed."""
         def decorator(f):
             def wrapper(*args, **kwargs):
                 job_id = str(uuid.uuid4())
