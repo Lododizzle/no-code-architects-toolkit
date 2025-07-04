@@ -1,24 +1,26 @@
 # Code Health Audit - 2025-07-04
 
 ## Test Results
-No tests were collected, so no failures or stack traces to report.
+Pytest collected no tests. No failures or stack traces were produced.
 
 ## Ruff Findings
-All checks passed with no violations.
+Ruff reported no issues.
 
 ## Bandit Findings
-The scan identified three Medium severity issues:
+Bandit identified three Medium severity issues:
 
-| Severity | Count | Details |
+| Severity | Issue | Location |
 |----------|-------|---------|
-| Medium   | 3     | B104 binding to all interfaces in `app.py:204`, B108 hardcoded temp directory in `config.py:27`, B113 request without timeout in `generate_docs.py:118` |
+| Medium | B104 binding to all interfaces | `app.py:204` |
+| Medium | B108 hardcoded temp directory | `config.py:27` |
+| Medium | B113 request without timeout | `generate_docs.py:118` |
 
 ## Cyclomatic Complexity
-Only one function exceeded a complexity of 10:
+One function exceeded a complexity score of 10:
 
 | File | Function | Complexity |
 |------|----------|-----------|
-| generate_docs.py | `main` | 13 (C) |
+| `generate_docs.py` | `main` | 13 (C) |
 
 ## Recommendations
 1. Add unit tests for configuration and blueprint registration to give pytest coverage.
