@@ -44,7 +44,10 @@ def validate_env_vars(provider):
         ],
         'S3_DO': ['S3_ENDPOINT_URL', 'S3_ACCESS_KEY', 'S3_SECRET_KEY']
     }
-    
+
+    if provider not in required_vars:
+        raise ValueError(f"Unsupported provider: {provider}")
+
     missing_vars = [var for var in required_vars[provider] if not os.getenv(var)]
     if missing_vars:
         vars_list = ', '.join(missing_vars)
