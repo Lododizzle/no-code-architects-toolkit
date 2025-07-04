@@ -24,6 +24,7 @@ import json
 from config import LOCAL_STORAGE_PATH
 
 def validate_payload(schema):
+    """Validate that incoming requests contain JSON matching the schema."""
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -60,6 +61,7 @@ def log_job_status(job_id, data):
         json.dump(data, f, indent=2)
 
 def queue_task_wrapper(bypass_queue=False):
+    """Wrap a view function to use the application's queue_task decorator."""
     def decorator(f):
         def wrapper(*args, **kwargs):
             return current_app.queue_task(bypass_queue=bypass_queue)(f)(*args, **kwargs)

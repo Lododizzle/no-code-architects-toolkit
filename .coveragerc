@@ -1,0 +1,5 @@
+[run]
+omit =
+    generate_docs.py
+    app.py
+    version.py

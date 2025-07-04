@@ -1,11 +1,29 @@
 
 ![Original Logo Symbol](https://github.com/user-attachments/assets/75173cf4-2502-4710-998b-6b81740ae1bd)
 
-# No-Code Architects Toolkit API 
+# No-Code Architects Toolkit API
+
+[![CI](https://github.com/stephengpope/no-code-architects-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/stephengpope/no-code-architects-toolkit/actions/workflows/ci.yml)
+[![Coverage](https://github.com/stephengpope/no-code-architects-toolkit/actions/workflows/coverage.yml/badge.svg)](https://github.com/stephengpope/no-code-architects-toolkit/actions/workflows/coverage.yml)
 
 Tired of wasting thousands of dollars on API subscriptions to support all your automations? What if there was a free alternative?
 
 The 100% FREE No-Code Architects Toolkit API processes different types of media. It is built in Python using Flask.
+
+## Getting Started
+
+```bash
+git clone https://github.com/stephengpope/no-code-architects-toolkit.git
+cd no-code-architects-toolkit
+pip install -r requirements.txt
+python app.py
+```
+
+Run tests with coverage:
+
+```bash
+pytest --cov=./
+```
 
 ## What Can It Do?
 
